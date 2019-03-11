@@ -2,6 +2,7 @@
 #python color_tracking.py
  
 # import the necessary packages
+from random import *
 from collections import deque
 import numpy as np
 import argparse
@@ -10,6 +11,10 @@ import cv2
 import urllib #for reading image from URL
  
  
+# status ready to play
+play = 0
+status = 0 
+
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video",
@@ -19,11 +24,11 @@ ap.add_argument("-b", "--buffer", type=int, default=64,
 args = vars(ap.parse_args())
  
 # define the lower and upper boundaries of the colors in the HSV color space
-lower = {'red':(166, 84, 141), 'green':(66, 122, 129), 'blue':(97, 100, 117), 'yellow':(23, 59, 119), 'orange':(0, 50, 80)} #assign new item lower['blue'] = (93, 10, 0)
-upper = {'red':(186,255,255), 'green':(86,255,255), 'blue':(117,255,255), 'yellow':(54,255,255), 'orange':(20,255,255)}
+lower = {'red':(166, 84, 141), 'green':(66, 122, 129), 'blue':(97, 100, 117), 'orange':(0, 50, 80)} #assign new item lower['blue'] = (93, 10, 0)
+upper = {'red':(186,255,255), 'green':(86,255,255), 'blue':(117,255,255), 'orange':(20,255,255)}
  
 # define standard colors for circle around the object
-colors = {'red':(0,0,255), 'green':(0,255,0), 'blue':(255,0,0), 'yellow':(0, 255, 217), 'orange':(0,140,255)}
+colors = {'red':(0,0,255), 'green':(0,255,0), 'blue':(255,0,0), 'orange':(0,140,255)}
  
 #pts = deque(maxlen=args["buffer"])
  
@@ -88,7 +93,45 @@ while True:
                 # draw the circle and centroid on the frame,
                 # then update the list of tracked points
                 # cv2.circle(frame, (int(x), int(y)), int(radius), colors[key], 2)
-                print(key)
+                # print(key )
+                if key in ['orange'] :    # status ready
+                    if status != 1 :
+                        print("ready to play")   # ready to play
+                    status = 1
+                elif key in ['blue']:  # status "la" -- パー 1
+                    x = randint(1, 3)
+                    if status != 2 :
+                        # print("blue")
+                        if x == 3:    # computer vs human :  チョキ vs パー 
+                            print("computer vs human :  チョキ vs パー ")
+                            print("computer win")
+                        if x == 2:    # computer vs human :  グ－ vs パー
+                            print("computer vs human :  グ－ vs パー")
+                            print("human win")
+                    status = 2
+                elif key in ['red']:  # status "dam" -- グ－ 2
+                    x = randint(1, 3)
+                    if status != 3:
+                        # print ("red")
+                        if x == 1:   # computer vs human : パー vs グ－
+                            print("computer vs human : パー vs グ－")
+                            print("computer win")
+                        if x == 3:   # computer vs human : チョキ vs グ－
+                            print("computer vs human : チョキ vs グ－")
+                            print("human win")
+                    status = 3
+                else:                  # status "keo" -- チョキ 3
+                    x = randint(1, 3)
+                    if status !=4:
+                        # print ("green")
+                        if x == 1:   # computer vs human : パー vs チョキ
+                            print("computer vs human : パー vs チョキ")
+                            print("human win")
+                        if x == 2:   # computer vs human : グ－ vs チョキ
+                            print("computer vs human : グ－ vs チョキ")
+                            print("computer win")
+                    status = 4
+
                 # cv2.putText(frame,key + " ball", (int(x-radius),int(y-radius)), cv2.FONT_HERSHEY_SIMPLEX, 0.6,colors[key],2)
  
      
