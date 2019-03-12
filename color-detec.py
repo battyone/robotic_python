@@ -13,7 +13,9 @@ import urllib #for reading image from URL
  
 # status ready to play
 play = 0
-status = 0 
+status = 0
+human = 0
+computer = 0
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
@@ -93,45 +95,57 @@ while True:
                 # draw the circle and centroid on the frame,
                 # then update the list of tracked points
                 # cv2.circle(frame, (int(x), int(y)), int(radius), colors[key], 2)
-                # print(key )
-                if key in ['orange'] :    # status ready
-                    if status != 1 :
-                        print("ready to play")   # ready to play
-                    status = 1
-                elif key in ['blue']:  # status "la" -- パー 1
-                    x = randint(1, 3)
-                    if status != 2 :
-                        # print("blue")
-                        if x == 3:    # computer vs human :  チョキ vs パー 
-                            print("computer vs human :  チョキ vs パー ")
-                            print("computer win")
-                        if x == 2:    # computer vs human :  グ－ vs パー
-                            print("computer vs human :  グ－ vs パー")
-                            print("human win")
-                    status = 2
-                elif key in ['red']:  # status "dam" -- グ－ 2
-                    x = randint(1, 3)
-                    if status != 3:
-                        # print ("red")
-                        if x == 1:   # computer vs human : パー vs グ－
-                            print("computer vs human : パー vs グ－")
-                            print("computer win")
-                        if x == 3:   # computer vs human : チョキ vs グ－
-                            print("computer vs human : チョキ vs グ－")
-                            print("human win")
-                    status = 3
-                else:                  # status "keo" -- チョキ 3
-                    x = randint(1, 3)
-                    if status !=4:
-                        # print ("green")
-                        if x == 1:   # computer vs human : パー vs チョキ
-                            print("computer vs human : パー vs チョキ")
-                            print("human win")
-                        if x == 2:   # computer vs human : グ－ vs チョキ
-                            print("computer vs human : グ－ vs チョキ")
-                            print("computer win")
-                    status = 4
-
+                # print(key ) 
+                if computer <=5 and human <=5:
+                    if key in ['orange'] :    # status ready
+                        if status != 1 :
+                            print("ready to play")   # ready to play
+                        status = 1
+                    elif key in ['blue']:  # status "la" -- パー 1
+                        x = randint(1, 3)
+                        if status != 2 :
+                            # print("blue")
+                            if x == 3:    # computer vs human :  チョキ vs パー 
+                                print("computer vs human :  チョキ vs パー ")
+                                print("computer win")
+                                computer +=1
+                            if x == 2:    # computer vs human :  グ－ vs パー
+                                print("computer vs human :  グ－ vs パー")
+                                print("human win")
+                                human +=1
+                        status = 2
+                    elif key in ['red']:  # status "dam" -- グ－ 2
+                        x = randint(1, 3)
+                        if status != 3:
+                            # print ("red")
+                            if x == 1:   # computer vs human : パー vs グ－
+                                print("computer vs human : パー vs グ－")
+                                print("computer win")
+                                computer +=1
+                            if x == 3:   # computer vs human : チョキ vs グ－
+                                print("computer vs human : チョキ vs グ－")
+                                print("human win")
+                                human +=1
+                        status = 3
+                    else:                  # status "keo" -- チョキ 3
+                        x = randint(1, 3)
+                        if status !=4:
+                            # print ("green")
+                            if x == 1:   # computer vs human : パー vs チョキ
+                                print("computer vs human : パー vs チョキ")
+                                print("human win")
+                                human +=1
+                            if x == 2:   # computer vs human : グ－ vs チョキ
+                                print("computer vs human : グ－ vs チョキ")
+                                print("computer win")
+                                computer +=1
+                        status = 4
+                if computer == 5:
+                    print("computer winnnnnnnnnn")
+                    computer += 1
+                if human == 5:
+                    print("congratulate human")
+                    human += 1   
                 # cv2.putText(frame,key + " ball", (int(x-radius),int(y-radius)), cv2.FONT_HERSHEY_SIMPLEX, 0.6,colors[key],2)
  
      
