@@ -3,6 +3,8 @@
  
 # import the necessary packages
 from random import *
+import RPi.GPIO as GPIO
+import time
 from collections import deque
 import numpy as np
 import argparse
@@ -10,12 +12,24 @@ import imutils
 import cv2
 import urllib #for reading image from URL
  
- 
+def computerchoice(number):
+    GPIO.output(number,GPIO.HIGH)
+    sleep(5)
+    GPIO.output(number,GPIO.LOW)
+
+
 # status ready to play
 play = 0
 status = 0
 human = 0
 computer = 0
+
+# setup led 
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+GPIO.setup(22,GPIO.OUT)
+GPIO.setup(27,GPIO.OUT)
+GPIO.setup(17,GPIO.OUT)
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
@@ -101,43 +115,49 @@ while True:
                         if status != 1 :
                             print("ready to play")   # ready to play
                         status = 1
-                    elif key in ['blue']:  # status "la" -- パー 1
+                    elif key in ['blue']:  # status "la" -- パー 1  -- GPIO 17
                         x = randint(1, 3)
                         if status != 2 :
                             # print("blue")
                             if x == 3:    # computer vs human :  チョキ vs パー 
                                 print("computer vs human :  チョキ vs パー ")
                                 print("computer win")
+                                computerchoice(27)
                                 computer +=1
                             if x == 2:    # computer vs human :  グ－ vs パー
                                 print("computer vs human :  グ－ vs パー")
                                 print("human win")
+                                computerchoice(22)
                                 human +=1
                         status = 2
-                    elif key in ['red']:  # status "dam" -- グ－ 2
+                    elif key in ['red']:  # status "dam" -- グ－ 2  -- GPIO 22
                         x = randint(1, 3)
                         if status != 3:
                             # print ("red")
                             if x == 1:   # computer vs human : パー vs グ－
                                 print("computer vs human : パー vs グ－")
                                 print("computer win")
+                                computerchoice(17)
                                 computer +=1
                             if x == 3:   # computer vs human : チョキ vs グ－
                                 print("computer vs human : チョキ vs グ－")
                                 print("human win")
+                                computerchoice(27)
                                 human +=1
                         status = 3
-                    else:                  # status "keo" -- チョキ 3
+                    else:                  # status "keo" -- チョキ 3   --GPIO 27
                         x = randint(1, 3)
                         if status !=4:
                             # print ("green")
                             if x == 1:   # computer vs human : パー vs チョキ
                                 print("computer vs human : パー vs チョキ")
                                 print("human win")
+                                computerchoice(17)
                                 human +=1
                             if x == 2:   # computer vs human : グ－ vs チョキ
                                 print("computer vs human : グ－ vs チョキ")
                                 print("computer win")
+                                computerchoice(22)
                                 computer +=1
                         status = 4
                 if computer == 5:
