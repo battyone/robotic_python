@@ -2,6 +2,8 @@
 #python color_tracking.py
  
 # import the necessary packages
+from gpiozero import PWMOutputDevice
+from gpiozero import DigitalOutputDevice
 from random import *
 import RPi.GPIO as GPIO
 import time
@@ -12,6 +14,27 @@ import imutils
 import cv2
 import urllib #for reading image from URL
  
+#motor setup 
+PWM_DRIVE_LEFT = 21		# ENA - H-Bridge enable pin
+FORWARD_LEFT_PIN = 26	# IN1 - Forward Drive
+REVERSE_LEFT_PIN = 19	# IN2 - Reverse Drive
+# Motor B, Right Side GPIO CONSTANTS
+PWM_DRIVE_RIGHT = 5		# ENB - H-Bridge enable pin
+FORWARD_RIGHT_PIN = 13	# IN1 - Forward Drive
+REVERSE_RIGHT_PIN = 6	# IN2 - Reverse Drive
+ 
+# Initialise objects for H-Bridge GPIO PWM pins
+# Set initial duty cycle to 0 and frequency to 1000
+driveLeft = PWMOutputDevice(PWM_DRIVE_LEFT, True, 0, 1000)
+driveRight = PWMOutputDevice(PWM_DRIVE_RIGHT, True, 0, 1000)
+ 
+# Initialise objects for H-Bridge digital GPIO pins
+forwardLeft = DigitalOutputDevice(FORWARD_LEFT_PIN)
+reverseLeft = DigitalOutputDevice(REVERSE_LEFT_PIN)
+forwardRight = DigitalOutputDevice(FORWARD_RIGHT_PIN)
+reverseRight = DigitalOutputDevice(REVERSE_RIGHT_PIN)
+
+
 def computerchoice(number):
     GPIO.output(number,GPIO.HIGH)
 
@@ -20,11 +43,29 @@ def turnledoff():
     GPIO.output(22,GPIO.LOW)
     GPIO.output(27,GPIO.LOW)
 
+def allStop():
+	forwardLeft.value = False
+	reverseLeft.value = False
+	forwardRight.value = False
+	reverseRight.value = False
+	driveLeft.value = 0
+	driveRight.value = 0
+ 
+def forwardDrive():
+	forwardLeft.value = True
+	reverseLeft.value = False
+	forwardRight.value = True
+	reverseRight.value = False
+	driveLeft.value = 1.0
+	driveRight.value = 1.0
+ 
+
 # status ready to play
 play = 0
 status = 0
 human = 0
 computer = 0
+com = 0
 
 # setup led 
 GPIO.setmode(GPIO.BCM)
@@ -115,6 +156,11 @@ while True:
                 if computer <=5 and human <=5:
                     if key in ['orange'] :    # status ready
                         if status != 1 :
+                            if com == 1:
+                                forwardDrive()
+                                time.sleep(3)
+                                allStop()
+                                com = 0
                             print("ready to play")   # ready to play
                             turnledoff()
                         status = 1
@@ -127,6 +173,7 @@ while True:
                                 print("computer win")
                                 computerchoice(27)
                                 computer +=1
+                                com = 1
                             if x == 2:    # computer vs human :  グ－ vs パー
                                 print("computer vs human :  グ－ vs パー")
                                 print("human win")
@@ -145,12 +192,13 @@ while True:
                                 print("computer win")
                                 computerchoice(17)
                                 computer +=1
+                                com = 1
                             if x == 3:   # computer vs human : チョキ vs グ－
                                 print("computer vs human : チョキ vs グ－")
                                 print("human win")
                                 computerchoice(27)
                                 human +=1
-                            if x == 2
+                            if x == 2:
                                 print("computer vs human : グ－ vs グ－")
                                 computerchoice(22)
                         status = 3
@@ -167,16 +215,19 @@ while True:
                                 print("computer vs human : グ－ vs チョキ")
                                 print("computer win")
                                 computerchoice(22)
+                                com = 1
                                 computer +=1
-                            if x == 3
+                            if x == 3:
                                 print("computer vs human : チョキ vs チョキ")
                                 computerchoice(27)
                         status = 4
                 if computer == 5:
                     print("computer winnnnnnnnnn")
+                    turnledoff()
                     computer += 1
                 if human == 5:
                     print("congratulate human")
+                    turnledoff()
                     human += 1   
                 # cv2.putText(frame,key + " ball", (int(x-radius),int(y-radius)), cv2.FONT_HERSHEY_SIMPLEX, 0.6,colors[key],2)
  
