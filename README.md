@@ -3,12 +3,12 @@
 
 # Active Flow
 
-![demo](https://github.com/vinhyenvodoi98/robotic_python/tree/master/picture/demo.jpg)
+![demo](https://github.com/vinhyenvodoi98/robotic_python/blob/master/picture/demo.jpg)
 
 
 Play Rock paper scissors with robot by color. Blue is paper, Green is scissors, Red is Rock. We show what color we choice with camera . Game will start and computer show what computer choice by turn on the led .
 
-![mechanism](https://github.com/vinhyenvodoi98/robotic_python/tree/master/picture/mechanism.png)
+![mechanism](https://github.com/vinhyenvodoi98/robotic_python/blob/master/picture/mechanism.png)
 
 **This project using** 
 * Raspberry Pi3 + camera
