@@ -1,6 +1,3 @@
-#python color_tracking.py --video balls.mp4
-#python color_tracking.py
- 
 # import the necessary packages
 from gpiozero import PWMOutputDevice
 from gpiozero import DigitalOutputDevice
@@ -14,7 +11,7 @@ import imutils
 import cv2
 import urllib #for reading image from URL
  
-#motor setup 
+# Motor setup 
 PWM_DRIVE_LEFT = 21		# ENA - H-Bridge enable pin
 FORWARD_LEFT_PIN = 26	# IN1 - Forward Drive
 REVERSE_LEFT_PIN = 19	# IN2 - Reverse Drive
@@ -34,16 +31,15 @@ reverseLeft = DigitalOutputDevice(REVERSE_LEFT_PIN)
 forwardRight = DigitalOutputDevice(FORWARD_RIGHT_PIN)
 reverseRight = DigitalOutputDevice(REVERSE_RIGHT_PIN)
 
-
-def computerchoice(number):
+def computerchoice(number):  # Turn on the leb to show what computer choice
     GPIO.output(number,GPIO.HIGH)
 
-def turnledoff():
+def turnledoff():    # turn all led off
     GPIO.output(17,GPIO.LOW)
     GPIO.output(22,GPIO.LOW)
     GPIO.output(27,GPIO.LOW)
 
-def allStop():
+def allStop():     # stop all motor
 	forwardLeft.value = False
 	reverseLeft.value = False
 	forwardRight.value = False
@@ -51,7 +47,7 @@ def allStop():
 	driveLeft.value = 0
 	driveRight.value = 0
  
-def forwardDrive():
+def forwardDrive():   # set motor run forward
 	forwardLeft.value = True
 	reverseLeft.value = False
 	forwardRight.value = True
@@ -67,7 +63,7 @@ human = 0
 computer = 0
 com = 0
 
-# setup led 
+# setup led GPIO 22,27,17
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 GPIO.setup(22,GPIO.OUT)
@@ -108,12 +104,6 @@ while True:
     # then we have reached the end of the video
     if args.get("video") and not grabbed:
         break
- 
-    #IP webcam image stream
-    #URL = 'http://10.254.254.102:8080/shot.jpg'
-    #urllib.urlretrieve(URL, 'shot1.jpg')
-    #frame = cv2.imread('shot1.jpg')
- 
  
     # resize the frame, blur it, and convert it to the HSV
     # color space
