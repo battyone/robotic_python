@@ -33,3 +33,7 @@ Detect color :
 
 motor driver tb6612FNG:
     https://www.bluetin.io/dc-motors/motor-driver-raspberry-pi-tb6612fng/
+    
+# Demo 
+
+* https://youtu.be/ydwQmtke-qo
